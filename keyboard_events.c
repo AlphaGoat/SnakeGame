@@ -3,8 +3,12 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "termios.h"
 #include "unistd.h"
+
+#include "keyboard_events.h"
 
 #define MAX_STRING_SIZE 100
 
@@ -68,72 +72,51 @@ int open_device() {
     return fd;
 }
 
-void sigint(int fd) {
+void exitGame(int fd) {
     /* Actions to perform after ctrl-c event */
     tty_reset(fd);
     close(fd);
+    printf("Quitting Game\n");
+    exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv){
-    // Print "Hello World" to terminal
-//    FILE *f = fopen("/dev/tty", "w");
-//    fprintf(f, "Hello, world!\n");
-
-//    // Test reading input from terminal
-//    char input[MAX_STRING_SIZE] = {0};
-//
-//    // Test opening terminal input
-//    int fd = open_device();
-//    if (tty_raw(fd)) {
-//        int upArrow = 0;
-//
-//        printf("Opened device");
-//
-//        size_t bytes_read = read(fd, input, MAX_STRING_SIZE);
-//        for (int i = 0; i < (int) bytes_read; i++) {
-//            if (input[i] == '\33') {
-//                if (input[i+2] == 'A') {
-//                    upArrow = 1;
-//                    break;
-//                }
-//            }
-//        }
-//
-//    if (upArrow) {
-//        printf("Registered 'arrow-up' event");
-//    }
-//
-////            fgets(input, sizeof(input), stdin);
-////            flush_input(input);
-//            
-//        tty_reset(fd);
-//    }
 //    close(fd);
-    device_handle = open_device();
+    int DeviceHandle;
+    DeviceHandle = open_device();
+//    atexit(exitint);
 
-    signal(SIGINT, sigint);
+//    signal(SIGINT, sigint);
     char input[MAX_STRING_SIZE] = {0};
 
-    if (tty_raw(device_handle)) {
-        int upArrow = 0;
-        printf("opened device");
+    printf("Got this far\n"); 
 
-        while(1) {
-            while(read(device_handle, input, MAX_STRING_SIZE > 0)) {
-                for (int i = 0; i < MAX_STRING_SIZE; i++) {
-                    if (input[i] == '\33') {
-                        if (input[i+2] == 'A') {
-                            upArrow = 1;
-                            break;
-                        }
-                    }
-                }
+    if (tty_raw(DeviceHandle) == 0) {
+        int upArrow = 0;
+        for(int i = 0; i < 10; i++) {
+            printf("Enter input: ");
+            sleep(1);
+            read(DeviceHandle, input, MAX_STRING_SIZE);
+            printf("%s\n", input);
+           //     for (int i = 0; i < MAX_STRING_SIZE; i++) {
+           //         if (input[i] == '\33') {
+           //             if (input[i+2] == 'A') {
+           //                 upArrow = 1;
+           //                 break;
+           //             }
+           //         }
+           //     }
+           // }
+            printf("iteration: %d\n", i);
+            if (strcmp(input, "q") == 0) {
+                sigint(DeviceHandle);
             }
         }
-        tty_reset(device_handle);
+        tty_reset(DeviceHandle);
     }
 
-    close(device_handle);
+    close(DeviceHandle);
+    printf("closing device");
     return 0;
- }
+}
 
