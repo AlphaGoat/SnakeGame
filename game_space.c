@@ -5,16 +5,97 @@
 
 // The Game Grid will consist of an array
 // of pointers to integer values
-int **GameGrid;
+//int **GameGrid;
 
-void GenerateGameSpace(int length, int speed,
-        int foodGenProb, int wallGenProb){
-    // Initialize snake
-    struct Snake snek = {};
-    snek.length = length;
-    snek.speed = speed;
-    snek.pos_x = (WIDTH / 2) + (snek.length / 2);
-    snek.pos_y = (HEIGHT / 2);
+void GenerateSnake(int length, int speed, int direction, 
+        int pos_x, int pos_y, int **GameGrid) {
+    /* Generate a snake structure (Actually a case for several smaller structure,
+     * each consisting of a body segment of the snake, whose positions and direction
+     * of travel are tracked seperately
+     *
+     * :param length:    length of the snake (i.e., how many body segments it is 
+     *                   composed of
+     * :param speed:     speed of the snake
+     * :param direction: starting direction for all body segments of snake. An 
+     *                   internal direction parameters will be tracked seperately
+     *                   for each body segment
+     * :param pos_x:     column where the head of the snake will start
+     * :param pos_y:     row where the head of the snake will start
+     */
+    struct SnakeBodySegment segments[length];
+    // Loop to initialize each body segment of the snake
+    int next_pos_x;
+    int next_pos_y;
+    int next_direction;
+    for (int i = 0; i < length; i++) {
+        // Initialization for snake's head
+        if (i == 0) {
+            segments[i].pos_x = pos_x;
+            segments[i].pos_y = pos_y;
+            segments[i].direction = direction;
+            // point linked direction to head's own direction, so that
+            // they are the same (head of snake determines direction of travel)
+            segments[i].linked_direction = &segments[i].direction;
+            segments[i].type = snk_head;
+        }
+        // Initialization for snake's tail (same as with body segment,
+        // only the type for display on the game grid is different)
+        else if (i == (length - 1)) {
+            segments[i].pos_x = next_pos_x;
+            segments[i].pos_y = next_pos_y;
+            segments[i].direction = next_direction;
+            segments[i].linked_direction = &segments[i-1].direction;
+            segments[i].type = snk_tail;
+        }
+        // Initialization for snake's body
+        else {
+            segments[i].pos_x = next_pos_x;
+            segments[i].pos_y = next_pos_y;
+            segments[i].direction = next_direction;
+            segments[i].linked_direction = &segments[i-1].direction;
+            segments[i].type = snk_body;
+        }
+
+        // determine x,y position of next body segment        
+        switch(segments[i].direction) {
+            case down:
+                next_pos_y = segments[i].pos_y + 1;
+            case up:
+                next_pos_y = segments[i].pos_y - 1;
+            case left:
+                next_pos_x = segments[i].pos_x + 1;
+            case right:
+                next_pos_x = segments[i].pos_x - 1;
+        }
+
+        // Check if that position will put the snake in conflict with 
+        // any other piece of the board
+        if (GameGrid[next_pos_y][next_pos_x] != blank_space) {
+            if (segments[i].direction
+                    }
+                    }
+                    }
+            
+
+
+int * CheckForSpaceConflict(int row, int col, 
+    int linkedDirection, int **GameGrid) {
+    /* Function that checks grid for potential conflict,
+     * and proposes a different set of coordinates based on
+     * conflict resolution
+     */
+    
+    // Check space above given row/col
+    
+    
+
+        
+
+        
+
+
+
+void GenerateGameSpace(struct Snake snek, int foodGenProb, int wallGenProb, int **GameGrid){
 
     // Initialize Game Grid
     GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
@@ -408,7 +489,16 @@ int rollForLowerVertJoint(int row, int col, int vertProb,
 int main() {
     int length = 3;
     int speed = 2;
-    GenerateGameSpace(length, speed, 5, 10);
+    // Initialize snake
+    struct Snake snek = {};
+    snek.length = length;
+    snek.speed = speed;
+    snek.pos_x = (WIDTH / 2) + (snek.length / 2);
+    snek.pos_y = (HEIGHT / 2);
+
+    // Initialize GameGrid
+    int **GameGrid;
+    GenerateGameSpace(snek, 5, 10, GameGrid);
 
     // print game board
     for (int i = 0; i < HEIGHT; i++) {

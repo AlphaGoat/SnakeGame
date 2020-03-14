@@ -4,12 +4,31 @@
 #define WIDTH 20
 #define HEIGHT 20
 
-struct Snake {
-    int pos_x; // x-position of snake's head
-    int pos_y; // y=position of snake's head
-    int length;
-    int speed;
+struct SnakeBodySegment {
+    int pos_x;
+    int pos_y;
+    int direction; // Direction of travel for body segment at moment in time
+    int *linked_direction; // Direction of travel for body segment ahead of this body part
+    int type;
 };
+
+
+struct Snake {
+//    int pos_x; // current x-position of snake's head
+//    int pos_y; // current y-position of snake's head
+//    int length;
+//    int speed;
+//    int direction;
+    int speed;
+    struct SnakeBodySegment segments[];
+};
+
+typedef enum {
+    up,
+    down,
+    right,
+    left,
+} Directions;
 
 typedef enum {
     blank_space,
@@ -33,7 +52,8 @@ const char *black_octagon = '\u2bc4';
 
 
 // Functions defined in snake.c
-void GenerateGameSpace(int length, int speed, int foodGenProb, int wallGenProb);
+void GenerateGameSpace(struct Snake snek, int foodGenProb, 
+        int wallGenProb, int **GameGrid);
 
 int horizontalWallSocket(int row, int col, int ljoint, int rjoint, int **GameGrid);
 
