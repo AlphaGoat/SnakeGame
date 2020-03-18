@@ -70,22 +70,22 @@ void GenerateSnake(int length, int speed, int direction,
 
         // Check if that position will put the snake in conflict with 
         // any other piece of the board
-        if (GameGrid[next_pos_y][next_pos_x] != blank_space) {
-            if (segments[i].direction
-                    }
-                    }
-                    }
-            
+//        if (GameGrid[next_pos_y][next_pos_x] != blank_space) {
+//            if (segments[i].direction
+//                    }
+//                    }
+//                    }
+            }
+}
 
-
-int * CheckForSpaceConflict(int row, int col, 
-    int linkedDirection, int **GameGrid) {
-    /* Function that checks grid for potential conflict,
-     * and proposes a different set of coordinates based on
-     * conflict resolution
-     */
-    
-    // Check space above given row/col
+//int * CheckForSpaceConflict(int row, int col, 
+//    int linkedDirection, int **GameGrid) {
+//    /* Function that checks grid for potential conflict,
+//     * and proposes a different set of coordinates based on
+//     * conflict resolution
+//     */
+//    
+//    // Check space above given row/col
     
     
 
@@ -97,10 +97,9 @@ int * CheckForSpaceConflict(int row, int col,
 
 void GenerateGameSpace(struct Snake snek, int foodGenProb, int wallGenProb, int **GameGrid){
 
-    // Initialize Game Grid
-    GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
-    for (int row = 0; row < HEIGHT; row++) {
-        GameGrid[row] = (int *) malloc(WIDTH * sizeof(int));
+    if (GameGrid == NULL) {
+        printf("malloc of size (%d,%d) failed!\n", HEIGHT, WIDTH);
+        exit(1);
     }
 
     // Store whatever remainder is left over after
@@ -108,10 +107,10 @@ void GenerateGameSpace(struct Snake snek, int foodGenProb, int wallGenProb, int 
     int wall_buffer = 2; // Buffer to leave between ends of snake and wall
 
     // Create a buffer on the outer edge of grid
-    for (int i = 0; i < WIDTH; i++) {
-        GameGrid[0][i] = hwall;
-        GameGrid[HEIGHT-1][i] = hwall;
-    }
+//    for (int i = 0; i < WIDTH; i++) {
+//        GameGrid[0][i] = hwall;
+//        GameGrid[HEIGHT-1][i] = hwall;
+//    }
 
     for (int i = 1; i < HEIGHT-1; i++) {
         GameGrid[i][0] = vwall;
@@ -498,6 +497,13 @@ int main() {
 
     // Initialize GameGrid
     int **GameGrid;
+
+    // Initialize Game Grid
+    GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
+    for (int row = 0; row < HEIGHT; row++) {
+        GameGrid[row] = (int *) malloc(WIDTH * sizeof(int));
+    }
+
     GenerateGameSpace(snek, 5, 10, GameGrid);
 
     // print game board
@@ -511,5 +517,5 @@ int main() {
         }
     }
 
-    free(GameGrid);
+//    free(GameGrid);
 }

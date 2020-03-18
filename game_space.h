@@ -4,6 +4,8 @@
 #define WIDTH 20
 #define HEIGHT 20
 
+//int **GameGrid[WIDTH][HEIGHT];
+
 struct SnakeBodySegment {
     int pos_x;
     int pos_y;
@@ -14,12 +16,12 @@ struct SnakeBodySegment {
 
 
 struct Snake {
-//    int pos_x; // current x-position of snake's head
-//    int pos_y; // current y-position of snake's head
-//    int length;
-//    int speed;
-//    int direction;
+    int pos_x; // current x-position of snake's head
+    int pos_y; // current y-position of snake's head
+    int length;
     int speed;
+    int direction;
+//    int speed;
     struct SnakeBodySegment segments[];
 };
 
