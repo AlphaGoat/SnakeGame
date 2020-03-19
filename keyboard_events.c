@@ -80,43 +80,43 @@ void exitGame(int fd) {
     exit(EXIT_SUCCESS);
 }
 
-int main(int argc, char **argv){
-//    close(fd);
-    int DeviceHandle;
-    DeviceHandle = open_device();
-//    atexit(exitint);
-
-//    signal(SIGINT, sigint);
-    char input[MAX_STRING_SIZE] = {0};
-
-    printf("Got this far\n"); 
-
-    if (tty_raw(DeviceHandle) == 0) {
-        int upArrow = 0;
-        for(int i = 0; i < 10; i++) {
-            printf("Enter input: ");
-            sleep(1);
-            read(DeviceHandle, input, MAX_STRING_SIZE);
-            printf("%s\n", input);
-           //     for (int i = 0; i < MAX_STRING_SIZE; i++) {
-           //         if (input[i] == '\33') {
-           //             if (input[i+2] == 'A') {
-           //                 upArrow = 1;
-           //                 break;
-           //             }
-           //         }
-           //     }
-           // }
-            printf("iteration: %d\n", i);
-            if (strcmp(input, "q") == 0) {
-                sigint(DeviceHandle);
-            }
-        }
-        tty_reset(DeviceHandle);
-    }
-
-    close(DeviceHandle);
-    printf("closing device");
-    return 0;
-}
-
+//int main(int argc, char **argv){
+////    close(fd);
+//    int DeviceHandle;
+//    DeviceHandle = open_device();
+////    atexit(exitint);
+//
+////    signal(SIGINT, sigint);
+//    char input[MAX_STRING_SIZE] = {0};
+//
+//    printf("Got this far\n"); 
+//
+//    if (tty_raw(DeviceHandle) == 0) {
+//        int upArrow = 0;
+//        for(int i = 0; i < 10; i++) {
+//            printf("Enter input: ");
+//            sleep(1);
+//            read(DeviceHandle, input, MAX_STRING_SIZE);
+//            printf("%s\n", input);
+//           //     for (int i = 0; i < MAX_STRING_SIZE; i++) {
+//           //         if (input[i] == '\33') {
+//           //             if (input[i+2] == 'A') {
+//           //                 upArrow = 1;
+//           //                 break;
+//           //             }
+//           //         }
+//           //     }
+//           // }
+//            printf("iteration: %d\n", i);
+//            if (strcmp(input, "q") == 0) {
+//                sigint(DeviceHandle);
+//            }
+//        }
+//        tty_reset(DeviceHandle);
+//    }
+//
+//    close(DeviceHandle);
+//    printf("closing device");
+//    return 0;
+//}
+//

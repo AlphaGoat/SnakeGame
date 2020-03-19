@@ -1,5 +1,5 @@
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef __GAMESPACE_H
+#define __GAMESPACE_H
 
 #define WIDTH 20
 #define HEIGHT 20
@@ -10,7 +10,7 @@ struct SnakeBodySegment {
     int pos_x;
     int pos_y;
     int direction; // Direction of travel for body segment at moment in time
-    int *linked_direction; // Direction of travel for body segment ahead of this body part
+    int prev_direction; // Direction of travel from last turn
     int type;
 };
 
@@ -42,17 +42,18 @@ typedef enum {
     snk_head,
     snk_body,
     snk_tail,
+    collision,
 } GameTypes;
 
 
-const char *left_triangle = '\u25c0';
-const char *right_triangle = '\u25b6';
-const char *up_triangle = '\u25b2';
-const char *down_triangle = '\u25bc';
-
-const char *black_square = '\u25a0';
-
-const char *black_octagon = '\u2bc4';
+//const char *left_triangle = '\u25c0';
+//const char *right_triangle = '\u25b6';
+//const char *up_triangle = '\u25b2';
+//const char *down_triangle = '\u25bc';
+//
+//const char *black_square = '\u25a0';
+//
+//const char *black_octagon = '\u2bc4';
 
 
 // Functions defined in snake.c
@@ -84,5 +85,7 @@ int rollForUpperVertJoint(int row, int col, int vertProb,
 int rollForLowerVertJoint(int row, int col, int vertProb,
        int rightHorizProb, int leftHorizProb, int blankSpaceProb, 
        int **GameGrid);
+
+void printGameBoard(int **GameGrid);
 
 #endif

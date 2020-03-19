@@ -226,7 +226,7 @@ void GenerateGameSpace(int foodGenProb, int wallGenProb,
         if (i == 0) {
             struct SnakeBodySegment head_segment;
             head_segment.direction = right;
-            head_segment.linked_direction = &head_segment.direction;
+            //head_segment.linked_direction = &head_segment.direction;
             head_segment.pos_x = snake_length;
             head_segment.pos_y = 1;
             head_segment.type = snk_head;
@@ -236,7 +236,7 @@ void GenerateGameSpace(int foodGenProb, int wallGenProb,
         else if (i == snake_length-1) {
             struct SnakeBodySegment tail_segment; 
             tail_segment.direction = right;
-            tail_segment.linked_direction = &snek_ptr[i-1].direction; 
+            //tail_segment.linked_direction = &snek_ptr[i-1].direction; 
             tail_segment.pos_x = 1;
             tail_segment.pos_y = 1;
             tail_segment.type = snk_tail;
@@ -246,7 +246,7 @@ void GenerateGameSpace(int foodGenProb, int wallGenProb,
         else {
             struct SnakeBodySegment body_segment; 
             body_segment.direction = right;
-            body_segment.linked_direction = &snek_ptr[i-1].direction; 
+            //body_segment.linked_direction = &snek_ptr[i-1].direction; 
             body_segment.pos_x = snake_length - i;
             body_segment.pos_y = 1;
             body_segment.type = snk_tail;
@@ -611,30 +611,8 @@ int rollForLowerVertJoint(int row, int col, int vertProb,
     return 1;
 }
 
-int main() {
-    int length = 5;
-    int speed = 2;
-    // Initialize snake
-    struct SnakeBodySegment snake[length];
-    struct SnakeBodySegment *snek_ptr = snake;
-
-    // Initialize GameGrid
-    int **GameGrid;
-
-    // Initialize Game Grid
-    GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
-    for (int row = 0; row < HEIGHT; row++) {
-        GameGrid[row] = (int *) malloc(WIDTH * sizeof(int));
-    }
-
-    if (GameGrid == NULL) {
-        printf("Memory not allocated.\n");
-        exit(0);
-    }
-
-    GenerateGameSpace(5, 10, GameGrid, snek_ptr, length);
-
-    // print game board
+void printGameBoard(int **GameGrid) {
+    // As the name implies, prints out the current status of game board
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
             printf("%d", GameGrid[i][j]);
@@ -644,7 +622,44 @@ int main() {
                 printf("\n");
         }
     }
+    printf("\n");
+}
+    
 
+//int main() {
+//    int length = 5;
+//    int speed = 2;
+//    // Initialize snake
+//    struct SnakeBodySegment snake[length];
+//    struct SnakeBodySegment *snek_ptr = snake;
+//
+//    // Initialize GameGrid
+//    int **GameGrid;
+//
+//    // Initialize Game Grid
+//    GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
+//    for (int row = 0; row < HEIGHT; row++) {
+//        GameGrid[row] = (int *) malloc(WIDTH * sizeof(int));
+//    }
+//
+//    if (GameGrid == NULL) {
+//        printf("Memory not allocated.\n");
+//        exit(0);
+//    }
+//
+//    GenerateGameSpace(5, 10, GameGrid, snek_ptr, length);
+//
+//    // print game board
+//    for (int i = 0; i < HEIGHT; i++) {
+//        for (int j = 0; j < WIDTH; j++) {
+//            printf("%d", GameGrid[i][j]);
+//
+//            // Move onto next line if we are at end of column
+//            if (j == WIDTH - 1)
+//                printf("\n");
+//        }
+//    }
+//
 //    // Test generating snake
 //    int snake_length = snek.length;
 //    int break_outer_loop = 0;
@@ -694,10 +709,10 @@ int main() {
 //    }
 
     // Go, my memory! Be free!
-    for (int i = 0; i < HEIGHT; i++) {
-        int *row_ptr = GameGrid[i];
-        free(row_ptr);
-    }
-    free(GameGrid);
-    return 1;
-}
+//    for (int i = 0; i < HEIGHT; i++) {
+//        int *row_ptr = GameGrid[i];
+//        free(row_ptr);
+//    }
+//    free(GameGrid);
+//    return 1;
+//}
