@@ -14,16 +14,18 @@ struct SnakeBodySegment {
     int type;
 };
 
+//struct SnakeBodySegment NullSeg = {0};
 
-struct Snake {
-    int pos_x; // current x-position of snake's head
-    int pos_y; // current y-position of snake's head
-    int length;
-    int speed;
-    int direction;
+//template <int len>
+//struct Snake {
+//    int pos_x; // current x-position of snake's head
+//    int pos_y; // current y-position of snake's head
+//    int length = len;
 //    int speed;
-    struct SnakeBodySegment segments[];
-};
+//    int direction;
+////    int speed;
+//    struct SnakeBodySegment segments[len];
+//};
 
 typedef enum {
     up,
@@ -54,8 +56,14 @@ const char *black_octagon = '\u2bc4';
 
 
 // Functions defined in snake.c
-void GenerateGameSpace(struct Snake snek, int foodGenProb, 
-        int wallGenProb, int **GameGrid);
+int GenerateSnake(int row, int col, int length, int direction,
+        struct Snake *snek, int **GameGrid);
+
+void GenerateSnakeSegment(struct Snake *snek, int row, int col,
+        int direction, int seg_number, int seg_type);
+
+void GenerateGameSpace(int foodGenProb, int wallGenProb, 
+        int **GameGrid, struct SnakeBodySegment *snek_ptr, int snake_length);
 
 int horizontalWallSocket(int row, int col, int ljoint, int rjoint, int **GameGrid);
 
