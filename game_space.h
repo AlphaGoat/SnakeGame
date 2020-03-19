@@ -88,4 +88,6 @@ int rollForLowerVertJoint(int row, int col, int vertProb,
 
 void printGameBoard(int **GameGrid);
 
+void randomlyGenerateFood(int foodGenProb, int **GameGrid);
+
 #endif

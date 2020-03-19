@@ -624,95 +624,18 @@ void printGameBoard(int **GameGrid) {
     }
     printf("\n");
 }
-    
 
-//int main() {
-//    int length = 5;
-//    int speed = 2;
-//    // Initialize snake
-//    struct SnakeBodySegment snake[length];
-//    struct SnakeBodySegment *snek_ptr = snake;
-//
-//    // Initialize GameGrid
-//    int **GameGrid;
-//
-//    // Initialize Game Grid
-//    GameGrid = (int **) malloc(HEIGHT * sizeof(int*));
-//    for (int row = 0; row < HEIGHT; row++) {
-//        GameGrid[row] = (int *) malloc(WIDTH * sizeof(int));
-//    }
-//
-//    if (GameGrid == NULL) {
-//        printf("Memory not allocated.\n");
-//        exit(0);
-//    }
-//
-//    GenerateGameSpace(5, 10, GameGrid, snek_ptr, length);
-//
-//    // print game board
-//    for (int i = 0; i < HEIGHT; i++) {
-//        for (int j = 0; j < WIDTH; j++) {
-//            printf("%d", GameGrid[i][j]);
-//
-//            // Move onto next line if we are at end of column
-//            if (j == WIDTH - 1)
-//                printf("\n");
-//        }
-//    }
-//
-//    // Test generating snake
-//    int snake_length = snek.length;
-//    int break_outer_loop = 0;
-//    for (int i = 1; i < HEIGHT-1; i++) {
-//        if (break_outer_loop) {
-//            break;
-//        }
-//        for (int j = 1; j < WIDTH-1; j++) {
-//            if (GenerateSnake(i, j, snake_length, up, snek_ptr, GameGrid)) {
-//                printf("Breaking snake generation loop\n");
-//                break_outer_loop = 1;
-//                break;
-//            }
-//        }
-//    }
-//
-//    // Print out the size of array
-//    size_t gameGridSize = sizeof(GameGrid) / sizeof(int);
-//    printf("Size of GameGrid: %zu\n", gameGridSize);
-    
+void RandomlyGenerateFood(int foodGenProb, int **GameGrid) {
+    /* Function to randomly generate food on GameGrid */
+    for (int i; i < HEIGHT; i++) {
+        for (int j; j < WIDTH; j++) {
+            if (GameGrid[i][j] == blank_space) {
+                int roll = rand() % 100;
+                if (roll < foodGenProb) {
+                    GameGrid[i][j] = food;
+                }
+            }
+        }
+    }
+}
 
-//    // Check to see if any of the segments of the snake are null.
-//    // If they are, then we failed in generating the snake
-//    for (int i = 0; i < snek.length; i++) {
-//        if (
-//                snek.segments[i].direction == NullSeg.direction &&
-//                snek.segments[i].linked_direction == NullSeg.linked_direction &&
-//                snek.segments[i].pos_x == NullSeg.pos_x &&
-//                snek.segments[i].pos_y == NullSeg.pos_y &&
-//                snek.segments[i].type == NullSeg.type) {
-//            printf("Segment %d of snake is a null value.", i);
-//            printf("Exiting test run");
-//            return 0;
-//        }
-//    }
-//
-//
-//    // print game board with snake
-//    for (int i = 0; i < HEIGHT; i++) {
-//        for (int j = 0; j < WIDTH; j++) {
-//            printf("%d", GameGrid[i][j]);
-//
-//            // Move onto next line if we are at end of column
-//            if (j == WIDTH - 1)
-//                printf("\n");
-//        }
-//    }
-
-    // Go, my memory! Be free!
-//    for (int i = 0; i < HEIGHT; i++) {
-//        int *row_ptr = GameGrid[i];
-//        free(row_ptr);
-//    }
-//    free(GameGrid);
-//    return 1;
-//}

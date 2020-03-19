@@ -59,34 +59,37 @@ int main(int argc, char **argv) {
         }
 
         // Stop game for moment to give user time to react
+        int input_recieved = 0; // Flag to close input buffer to further user input
         clock_t start = clock();
         clock_t end;
         double time_taken;
         while(time_taken < 1.0) {
 
             // Check if user has input a command
+//            if (!input_recieved)
             read(fd, user_input, MAX_STRING_SIZE);
 
             // Parse input
             if (strcmp(user_input, "q") == 0) {
+ //               input_recieved = 1;
                 exitGame(fd);
                 break; // Shouldn't get to this line...hopefully
             }
             else if (strcmp(user_input, "w") == 0) {
+//                input_recieved = 1;
                 snek[0].direction = up;
-                break;
             }
             else if (strcmp(user_input, "d") == 0) {
+ //               input_recieved = 1;
                 snek[0].direction = right;
-                break;
             }
             else if (strcmp(user_input, "s") == 0) {
+//                input_recieved = 1;
                 snek[0].direction = down;
-                break;
             }
             else if (strcmp(user_input, "a") == 0) {
+//                input_recieved = 1;
                 snek[0].direction = left;
-                break;
             }
             end = clock();
             time_taken = ((double)(end - start))/CLOCKS_PER_SEC;
@@ -138,6 +141,9 @@ int main(int argc, char **argv) {
         printf("Score: %d\n", score);
         printGameBoard(GameGrid);
 
+        // Randomly generate food
+        int foodGenProb = 1; // (1/100) chance of empty square spawning more food
+        randomlyGenerateFood(foodGenProb, GameGrid);
     }
 
     exitGame(fd);
