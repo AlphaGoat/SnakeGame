@@ -1,3 +1,4 @@
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +13,18 @@
 #include "keyboard_events.h"
 
 #define MAX_STRING_SIZE 100
+
+// Command line arguments
+static struct option long_options[] =
+    {
+        /* These options don't set a flag */
+        {"version", no_argument,          0, 'v'},
+        {"help",    no_argument,          0, 'h'},
+        {"num_snakes", optional_argument, 0, 's'},
+        {"input_time", optional_argument, 0, 'i'},
+        {0, 0, 0, 0}
+};
+
 
 int main(int argc, char **argv) {
 
