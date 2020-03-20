@@ -51,10 +51,16 @@ int main(int argc, char **argv) {
  //       close(fd);
  //       return 1;
  //   }
-//    float test_float;
-//    test_float = atof("1.5");
+    
+ //   float test_float;
+ //   char float_buff[3] = "1.5";
+ //   test_float = atof(float_buff);
+//    test_float = atof("2.3");
 //    printf("value of test_float, after conversion: %f", test);
-//    int test_int;
+//    long test_long;
+//    char test_str[30] = "40587 this is a test";
+//    char *test_ptr;
+//    test_long = strtol(test_str, &test_ptr, 10);
 //    test_int = atoi("3");
 //    printf("value of test_int, after conversion: %d", test_int);
 //    tty_reset(fd);
@@ -114,7 +120,6 @@ int main(int argc, char **argv) {
 //        }
 //    }
 
-
     char *line = NULL;
     size_t len;
     
@@ -142,6 +147,9 @@ int main(int argc, char **argv) {
     char user_input[MAX_STRING_SIZE];
 
     // Start game by printing out initial state of board
+    printf("Welcome to the Game of Snakes!\n");
+    printf("Pwease no steppy\n");
+    sleep(1.0);
     printGameBoard(GameGrid);
 
     // Initiate game loop
@@ -170,12 +178,12 @@ int main(int argc, char **argv) {
             read(fd, user_input, MAX_STRING_SIZE);
 
             // Parse input
-            if (strcmp(user_input, "q") == 0) {
+            if (strcmp(&user_input[0], "q") == 0) {
  //               input_recieved = 1;
                 exitGame(fd);
                 break; // Shouldn't get to this line...hopefully
             }
-            else if (strcmp(user_input, "w") == 0) {
+            else if (strcmp(&user_input[0], "w") == 0) {
 //                input_recieved = 1;
                 snek[0].direction = up;
             }
@@ -196,6 +204,8 @@ int main(int argc, char **argv) {
         }
         // Reset timer
         time_taken = 0.0;
+        printf("user_input: %s\n", user_input);
+        printf("user_input first char: %s\n", &user_input[0]);
 
         // Flush terminal input buffer
         //user_input[0] = '\0';

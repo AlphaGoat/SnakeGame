@@ -18,12 +18,12 @@ struct SnakeBodySegment {
 
 //template <int len>
 //struct Snake {
-//    int pos_x; // current x-position of snake's head
-//    int pos_y; // current y-position of snake's head
+////    int pos_x; // current x-position of snake's head
+////    int pos_y; // current y-position of snake's head
 //    int length = len;
-//    int speed;
-//    int direction;
 ////    int speed;
+////    int direction;
+//////    int speed;
 //    struct SnakeBodySegment segments[len];
 //};
 
@@ -58,7 +58,7 @@ typedef enum {
 
 // Functions defined in snake.c
 int GenerateSnake(int row, int col, int length, int direction,
-        struct Snake *snek, int **GameGrid);
+        struct SnakeBodySegment *snek, int **GameGrid);
 
 void GenerateSnakeSegment(struct Snake *snek, int row, int col,
         int direction, int seg_number, int seg_type);

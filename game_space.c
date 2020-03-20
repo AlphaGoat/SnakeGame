@@ -80,7 +80,7 @@
 
 // TODO: Try to get this working....
 //int GenerateSnake(int row, int col, int length, int direction,
-//        struct Snake *snek, int **GameGrid) {
+//        struct SnakeBodySegment *snek, int **GameGrid) {
 //    /* Checks for a path free of obstacles to place snake
 //     * :param row:       row of starting position
 //     * :param col:       column of starting position
@@ -249,7 +249,7 @@ void GenerateGameSpace(int foodGenProb, int wallGenProb,
             //body_segment.linked_direction = &snek_ptr[i-1].direction; 
             body_segment.pos_x = snake_length - i;
             body_segment.pos_y = 1;
-            body_segment.type = snk_tail;
+            body_segment.type = snk_body;
             snek_ptr[i] = body_segment;
             GameGrid[1][body_segment.pos_x] = snk_body;
         }
