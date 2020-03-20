@@ -14,19 +14,69 @@
 
 #define MAX_STRING_SIZE 100
 
+static int rand_snek_flag;
+
 // Command line arguments
 static struct option long_options[] =
     {
+        /* These options set a flag */
+        {"random_sneks", no_argument, &rand_snek_flag, 1},
         /* These options don't set a flag */
         {"version", no_argument,          0, 'v'},
         {"help",    no_argument,          0, 'h'},
-        {"num_snakes", optional_argument, 0, 's'},
-        {"input_time", optional_argument, 0, 'i'},
+        {"num_sneks", optional_argument,  0, 's'},
+        {"turn_time", optional_argument,  0, 't'},
         {0, 0, 0, 0}
 };
 
 
 int main(int argc, char **argv) {
+
+    int c;
+
+    // Pre initialize game variables
+    int num_sneks = 1;
+    float turn_time = 1.0;
+
+    // Manage commamnd line arguments
+    while(1) {
+        int option_index = 0;
+
+        c = getopt_long(argc, argv, "vhs::t::",
+                long_options, &option_index);
+
+        /* Detect the end of the options */
+        if (c == -1) 
+            break;
+
+        switch(c) {
+            case 0:
+                /* If this option set a flag, do nothing else now */
+                if (long_options[option_index].flag != 0) 
+                    break;
+                printf("option %s", long_options[option_index].name);
+                if (optarg)
+                    printf(" with arg %s", optarg);
+                printf("\n");
+                break;
+
+            case 'v':
+                /* Version flag */
+                printf("SnakeGame v1.0");
+                return 0;
+
+            case 'h':
+                /* Help argument */
+                print_help_statement();
+
+            case 's':
+                num_sneks = atoi(optarg);
+
+            case 't':
+                turn_time = atof(optarg);
+        }
+    }
+
 
     char *line = NULL;
     size_t len;
@@ -76,7 +126,7 @@ int main(int argc, char **argv) {
         clock_t start = clock();
         clock_t end;
         double time_taken;
-        while(time_taken < 1.0) {
+        while(time_taken < turn_time) {
 
             // Check if user has input a command
 //            if (!input_recieved)
@@ -209,7 +259,9 @@ int movement(struct SnakeBodySegment *segment, int **GameGrid) {
     return 1;
 }
 
-
+void print_help_statement(){
+    printf("Help Options\n");
+}
 
 
 
