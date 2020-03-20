@@ -625,7 +625,7 @@ void printGameBoard(int **GameGrid) {
     printf("\n");
 }
 
-void RandomlyGenerateFood(int foodGenProb, int **GameGrid) {
+void randomlyGenerateFood(int foodGenProb, int **GameGrid) {
     /* Function to randomly generate food on GameGrid */
     for (int i; i < HEIGHT; i++) {
         for (int j; j < WIDTH; j++) {

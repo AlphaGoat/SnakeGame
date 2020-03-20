@@ -22,10 +22,11 @@ static struct option long_options[] =
         /* These options set a flag */
         {"random_sneks", no_argument, &rand_snek_flag, 1},
         /* These options don't set a flag */
-        {"version", no_argument,          0, 'v'},
-        {"help",    no_argument,          0, 'h'},
-        {"num_sneks", optional_argument,  0, 's'},
-        {"turn_time", optional_argument,  0, 't'},
+        {"version",       no_argument,       0, 'v'},
+        {"help",          no_argument,       0, 'h'},
+        {"num_sneks",     required_argument, 0, 's'},
+        {"turn_time",     required_argument, 0, 't'},
+        {"food_gen_prob", required_argument, 0, 'f'},
         {0, 0, 0, 0}
 };
 
@@ -37,45 +38,81 @@ int main(int argc, char **argv) {
     // Pre initialize game variables
     int num_sneks = 1;
     float turn_time = 1.0;
+    int food_gen_prob = 1; // (1/100) chance of empty square spawning more food
 
+    /*---------------- TEST ----------------------------- */
+ //   int fd;
+ //   fd = open_device(); 
+ //   // Set terminal in raw mode to handle user input
+ //   if (tty_raw(fd) != 0) {
+ //       printf("Error. Unable to set terminal in raw mode\n");
+ //       printf("Exiting game.\n");
+ //       tty_reset(fd);
+ //       close(fd);
+ //       return 1;
+ //   }
+//    float test_float;
+//    test_float = atof("1.5");
+//    printf("value of test_float, after conversion: %f", test);
+//    int test_int;
+//    test_int = atoi("3");
+//    printf("value of test_int, after conversion: %d", test_int);
+//    tty_reset(fd);
+    /*---------------- TEST ----------------------------- */
+    
     // Manage commamnd line arguments
-    while(1) {
-        int option_index = 0;
-
-        c = getopt_long(argc, argv, "vhs::t::",
-                long_options, &option_index);
-
-        /* Detect the end of the options */
-        if (c == -1) 
-            break;
-
-        switch(c) {
-            case 0:
-                /* If this option set a flag, do nothing else now */
-                if (long_options[option_index].flag != 0) 
-                    break;
-                printf("option %s", long_options[option_index].name);
-                if (optarg)
-                    printf(" with arg %s", optarg);
-                printf("\n");
-                break;
-
-            case 'v':
-                /* Version flag */
-                printf("SnakeGame v1.0");
-                return 0;
-
-            case 'h':
-                /* Help argument */
-                print_help_statement();
-
-            case 's':
-                num_sneks = atoi(optarg);
-
-            case 't':
-                turn_time = atof(optarg);
-        }
-    }
+//    while(1) {
+//        int option_index = 0;
+//
+//        c = getopt_long(argc, argv, "vhs:t:f:",
+//                long_options, &option_index);
+//
+//        /* Detect the end of the options */
+//        if (c == -1) 
+//            break;
+//
+//        switch(c) {
+//            case 0:
+//                /* If this option set a flag, do nothing else now */
+//                if (long_options[option_index].flag != 0) 
+//                    break;
+//                printf("option %s", long_options[option_index].name);
+//                if (optarg)
+//                    printf(" with arg %s", optarg);
+//                printf("\n");
+//                break;
+//
+//            case 'v':
+//                /* Version flag */
+//                printf("SnakeGame v1.0");
+//                return 0;
+//
+//            case 'h':
+//                /* Help argument */
+//                print_help_statement();
+//
+//            case 's':
+//                if (optarg)
+//                    num_sneks = atoi(optarg);
+//                else {
+//                    printf("Error: argument not read.\n");
+//                    printf("Try specifying arg val with '=' next time\n");
+//                }
+//
+//            case 't':
+//                if (optarg) {
+//                    printf("This is the argument to turn_time: %s", optarg);
+//                    turn_time = atof(optarg);
+//                }
+//                else {
+//                    printf("Error: argument not read.\n");
+//                    printf("Try specifying arg val with '=' next time\n");
+//                }
+//
+//            case 'f':
+//                food_gen_prob = atoi(optarg);
+//        }
+//    }
 
 
     char *line = NULL;
@@ -161,7 +198,7 @@ int main(int argc, char **argv) {
         time_taken = 0.0;
 
         // Flush terminal input buffer
-        user_input[0] = '\0';
+        //user_input[0] = '\0';
 
         // Move snek
         for (int i = 0; i < snake_length; i++) {
@@ -205,8 +242,7 @@ int main(int argc, char **argv) {
         printGameBoard(GameGrid);
 
         // Randomly generate food
-        int foodGenProb = 1; // (1/100) chance of empty square spawning more food
-        randomlyGenerateFood(foodGenProb, GameGrid);
+        randomlyGenerateFood(food_gen_prob, GameGrid);
     }
 
     exitGame(fd);
