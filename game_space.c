@@ -3,203 +3,146 @@
 
 #include "game_space.h"
 
-// The Game Grid will consist of an array
-// of pointers to integer values
-//int **GameGrid;
 
-//void GenerateSnake(int length, int speed, int direction, 
-//        int pos_x, int pos_y, int **GameGrid) {
-//    /* Generate a snake structure (Actually a case for several smaller structure,
-//     * each consisting of a body segment of the snake, whose positions and direction
-//     * of travel are tracked seperately
-//     *
-//     * :param length:    length of the snake (i.e., how many body segments it is 
-//     *                   composed of
-//     * :param speed:     speed of the snake
-//     * :param direction: starting direction for all body segments of snake. An 
-//     *                   internal direction parameters will be tracked seperately
-//     *                   for each body segment
-//     * :param pos_x:     column where the head of the snake will start
-//     * :param pos_y:     row where the head of the snake will start
-//     */
-//    struct SnakeBodySegment segments[length];
-//    // Loop to initialize each body segment of the snake
-//    int next_pos_x;
-//    int next_pos_y;
-//    int next_direction;
-//    for (int i = 0; i < length; i++) {
-//        // Initialization for snake's head
-//        if (i == 0) {
-//            segments[i].pos_x = pos_x;
-//            segments[i].pos_y = pos_y;
-//            segments[i].direction = direction;
-//            // point linked direction to head's own direction, so that
-//            // they are the same (head of snake determines direction of travel)
-//            segments[i].linked_direction = &segments[i].direction;
-//            segments[i].type = snk_head;
-//        }
-//        // Initialization for snake's tail (same as with body segment,
-//        // only the type for display on the game grid is different)
-//        else if (i == (length - 1)) {
-//            segments[i].pos_x = next_pos_x;
-//            segments[i].pos_y = next_pos_y;
-//            segments[i].direction = next_direction;
-//            segments[i].linked_direction = &segments[i-1].direction;
-//            segments[i].type = snk_tail;
-//        }
-//        // Initialization for snake's body
-//        else {
-//            segments[i].pos_x = next_pos_x;
-//            segments[i].pos_y = next_pos_y;
-//            segments[i].direction = next_direction;
-//            segments[i].linked_direction = &segments[i-1].direction;
-//            segments[i].type = snk_body;
-//        }
-//
-//        // determine x,y position of next body segment        
-//        switch(segments[i].direction) {
-//            case down:
-//                next_pos_y = segments[i].pos_y + 1;
-//            case up:
-//                next_pos_y = segments[i].pos_y - 1;
-//            case left:
-//                next_pos_x = segments[i].pos_x + 1;
-//            case right:
-//                next_pos_x = segments[i].pos_x - 1;
-//        }
-//
-//        // Check if that position will put the snake in conflict with 
-//        // any other piece of the board
-////        if (GameGrid[next_pos_y][next_pos_x] != blank_space) {
-////            if (segments[i].direction
-////                    }
-////                    }
-////                    }
-//            }
-//}
+struct SnakeBodySegment NullSeg = {0};
 
 // TODO: Try to get this working....
-//int GenerateSnake(int row, int col, int length, int direction,
-//        struct SnakeBodySegment *snek, int **GameGrid) {
-//    /* Checks for a path free of obstacles to place snake
-//     * :param row:       row of starting position
-//     * :param col:       column of starting position
-//     * :param length:    length of snake
-//     * :param direction: direction to last segment that was laid down,
-//     *                   relative to the current position (up, down,
-//     *                   right, or left)
-//     * :param snek:      Pointer to snake structure containing and
-//     *                   tracking all body segments of snake 
-//     * :param GameGrid:  pointer to 2-D array of game grid
-//     */
-//    // Are we out of bounds?
-//    if (row >= HEIGHT || row < 0 || col >= WIDTH || col < 0) {
-//        return 0;
-//    }
-//
-//    // Check to see if current space is occupied
-//    else if (GameGrid[row][col] != blank_space) {
-//        return 0;
-//    }
-//
-//    // Check to see if this is the last segment of snake.
-//    // If so, generate a tail and return success!
-//    else if (length == 1) {
-//        GenerateSnakeSegment(snek, row, col, direction, snek->length-1, 
-//                snk_tail, GameGrid);
-//        return 1;
-//    }
-//
-//    // If space is not occupied, generate snake segment
-//    else {
-//        // If this is the first step through recursion, then generate a snake head
-//        if (length == snek->length) {
-//            GenerateSnakeSegment(snek, row, col, direction, 0, snk_head, GameGrid);
-//            printf("Generating head (seg_number 0)\n");
-//        }
-//        // Otherwise, generate a body segment
-//        else {
-//            int seg_number = (snek->length - length);
-//            printf("On seg_number: %d\n", seg_number);
-//            GenerateSnakeSegment(snek, row, col, direction, 
-//                    seg_number, snk_body, GameGrid);
-//        }
-//    }
-//
-//    // Check all paths around current position to see if 
-//    // further snake segments can be laid out
-//    // UP ----
-//    if (direction != up) {
-//        if (GenerateSnake(row-1, col, length-1, down, snek, GameGrid)) {
-//            return 1;
-//        }
-//    }
-//
-//    // DOWN ----
-//    else if (direction != down) {
-//        if (GenerateSnake(row+1, col, length-1, up, snek, GameGrid)) {
-//            return 1;
-//        }
-//    }
-//
-//    // RIGHT ----
-//    else if (direction != right) {
-//        if (GenerateSnake(row, col+1, length-1, left, snek, GameGrid)) {
-//            return 1;
-//        }
-//    }
-//
-//    // LEFT ----
-//    else if (direction != left) {
-//        if (GenerateSnake(row, col-1, length-1, right, snek, GameGrid)) {
-//            return 1;
-//        }
-//    }
-//
-//    // If there are no more spaces to go, remove the snake segment
-//    // from current position
-//    else {
-//        printf("Generating a null segment\n");
-//        int n = (snek->length-length);
-////        snek->segments[n] = NULL;
-//        snek->segments[n] = NullSeg;
-//        GameGrid[row][col] = blank_space;
-//        return 0;
-//    }
-//}
-//
-//void GenerateSnakeSegment(struct Snake *snek, int row, int col,
-//        int direction, int seg_number, int seg_type) {
-//    /* Wrapper function to generate a snake segment
-//     * :param snek:    pointer to snake structure
-//     * :param row:     row we are placing body segment
-//     * :param col:     column we are placing body segment
-//     * :param direction: direction that body segment is facing
-//     * :param linked_direction: direction that body segment that comes before 
-//     *                          this one in snake structure is facing
-//     */
-//    struct SnakeBodySegment body_segment;
-//    body_segment.pos_y = row;
-//    body_segment.pos_x = col;
-//    body_segment.direction = direction;
-//
-//    if (seg_type == snk_tail) {
-//        body_segment.linked_direction = &(snek->segments[seg_number-1].direction);
-//    }
-//
-//    else if (seg_type == snk_body) {
-//        body_segment.linked_direction = &(snek->segments[seg_number-1].direction);
-//    }
-//
-//    else {
-//        body_segment.linked_direction = &body_segment.direction;
-//    }
-//
-//    snek->segments[seg_number] = body_segment;
-//}
+int GenerateSnake(int row, int col, int segs2generate, int direction,
+         int npc_flag, struct Snake *snek_ptr, int **GameGrid) {
+    /* Checks for a path free of obstacles to place snake
+     * :param row:            row of starting position
+     * :param col:            column of starting position
+     * :param segs2generate:  number of snake body segments left to generate
+     * :param direction:      direction to last segment that was laid down,
+     *                        relative to the current position (up, down,
+     *                        right, or left)
+     * :param npc_snek_flag:  flag that tells generator whether or not the
+     *                        snake will be controlled by the player or not
+     *                        (npc snakes have different appearance on board
+     *                        from player snake to allow user to differentiate)
+     * :param snek_ptr:       Pointer to snake structure containing and
+     *                        tracking all body segments of snake 
+     * :param GameGrid:       pointer to 2-D array of game grid
+     */
+    int snek_length = snek_ptr->length;
+    // Are we out of bounds?
+    if (row >= HEIGHT || row < 0 || col >= WIDTH || col < 0) {
+        return 0;
+    }
 
-void GenerateGameSpace(int foodGenProb, int wallGenProb, 
-        int **GameGrid, struct SnakeBodySegment *snek_ptr, int snake_length){
+    // Check to see if current space is occupied
+    else if (GameGrid[row][col] != blank_space) {
+        return 0;
+    }
+
+    // Check to see if this is the last segment of snake.
+    // If so, generate a tail and return success!
+    else if (segs2generate == 1) {
+        int seg_number = snek_length - 1;
+        switch (npc_flag) {
+            case 0:
+//                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number, 
+//                        snk_tail);
+                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
+                        snk_body);
+            case 1:
+//                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
+//                        npc_snk_tail);
+                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
+                        npc_snk_body);
+        }
+        return 1;
+    }
+
+    // If space is not occupied, generate snake segment
+    else if (segs2generate == snek_length){
+        // If this is the first step through recursion, then generate a snake head
+        switch (npc_flag) {
+            case 0:
+                GenerateSnakeSegment(snek_ptr, row, col, direction, 0, snk_head);
+            case 1:
+                GenerateSnakeSegment(snek_ptr, row, col, direction, 0, npc_snk_head);
+        }
+//        printf("Generating head (seg_number 0)\n");
+
+        // Otherwise, generate a body segment
+    }
+    else {
+        int seg_number = (snek_length - segs2generate);
+//        printf("On seg_number: %d\n", seg_number);
+        switch (npc_flag) {
+            case 0:
+                GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                        seg_number, snk_body);
+            case 1:
+                GenerateSnakeSegment(snek_ptr, row, col, direction,
+                        seg_number, npc_snk_body);
+        }
+    }
+
+    // Check all paths around current position to see if 
+    // further snake segments can be laid out
+    // UP ----
+    if (direction != up) {
+        if (GenerateSnake(row-1, col, segs2generate-1, down, 
+                    npc_flag, snek_ptr, GameGrid)) {
+            return 1;
+        }
+    }
+
+    // DOWN ----
+    else if (direction != down) {
+        if (GenerateSnake(row+1, col, segs2generate-1, up, 
+                    npc_flag, snek_ptr, GameGrid)) {
+            return 1;
+        }
+    }
+
+    // RIGHT ----
+    else if (direction != right) {
+        if (GenerateSnake(row, col+1, segs2generate-1, left, 
+                    npc_flag, snek_ptr, GameGrid)) {
+            return 1;
+        }
+    }
+
+    // LEFT ----
+    else if (direction != left) {
+        if (GenerateSnake(row, col-1, segs2generate-1, right, 
+                    npc_flag, snek_ptr, GameGrid)) {
+            return 1;
+        }
+    }
+
+    // If there are no more spaces to go, remove the snake segment
+    // from current position
+    else {
+        printf("Generating a null segment\n");
+        int seg_number = (snek_length - segs2generate);
+//        snek->segments[n] = NULL;
+        snek_ptr->segments[seg_number] = NullSeg;
+    }
+    return 0;
+}
+//
+void GenerateSnakeSegment(struct Snake *snek_ptr, int row, int col,
+        int direction, int seg_number, int seg_type) {
+    /* Wrapper function to generate a snake segment
+     * :param snek:    pointer to snake structure
+     * :param row:     row we are placing body segment
+     * :param col:     column we are placing body segment
+     * :param direction: direction that body segment is facing
+     */
+    struct SnakeBodySegment body_segment;
+    body_segment.pos_y = row;
+    body_segment.pos_x = col;
+    body_segment.direction = direction;
+    body_segment.type = seg_type;
+    snek_ptr->segments[seg_number] = body_segment;
+}
+
+void GenerateGameSpace(int foodGenProb, int wallGenProb, int **GameGrid){
+
 
     // Initialize game grid with blank spaces
     for (int i = 0; i < HEIGHT; i++) {
@@ -219,41 +162,41 @@ void GenerateGameSpace(int foodGenProb, int wallGenProb,
         GameGrid[i][WIDTH-1] = vwall;
     }
 
-    // Generate snake body
-    for (int i = 0; i < snake_length; i++) {
-        // Place snake at top left of board and leave enough room for
-        // whole body
-        if (i == 0) {
-            struct SnakeBodySegment head_segment;
-            head_segment.direction = right;
-            //head_segment.linked_direction = &head_segment.direction;
-            head_segment.pos_x = snake_length;
-            head_segment.pos_y = 1;
-            head_segment.type = snk_head;
-            snek_ptr[i] = head_segment;
-            GameGrid[head_segment.pos_y][head_segment.pos_x] = snk_head;
-        }
-        else if (i == snake_length-1) {
-            struct SnakeBodySegment tail_segment; 
-            tail_segment.direction = right;
-            //tail_segment.linked_direction = &snek_ptr[i-1].direction; 
-            tail_segment.pos_x = 1;
-            tail_segment.pos_y = 1;
-            tail_segment.type = snk_tail;
-            snek_ptr[i] = tail_segment;
-            GameGrid[1][1] = snk_tail;
-        }
-        else {
-            struct SnakeBodySegment body_segment; 
-            body_segment.direction = right;
-            //body_segment.linked_direction = &snek_ptr[i-1].direction; 
-            body_segment.pos_x = snake_length - i;
-            body_segment.pos_y = 1;
-            body_segment.type = snk_body;
-            snek_ptr[i] = body_segment;
-            GameGrid[1][body_segment.pos_x] = snk_body;
-        }
-    }
+//    // Generate snake body
+//    for (int i = 0; i < snake_length; i++) {
+//        // Place snake at top left of board and leave enough room for
+//        // whole body
+//        if (i == 0) {
+//            struct SnakeBodySegment head_segment;
+//            head_segment.direction = right;
+//            //head_segment.linked_direction = &head_segment.direction;
+//            head_segment.pos_x = snake_length;
+//            head_segment.pos_y = 1;
+//            head_segment.type = snk_head;
+//            snek_ptr[i] = head_segment;
+//            GameGrid[head_segment.pos_y][head_segment.pos_x] = snk_head;
+//        }
+//        else if (i == snake_length-1) {
+//            struct SnakeBodySegment tail_segment; 
+//            tail_segment.direction = right;
+//            //tail_segment.linked_direction = &snek_ptr[i-1].direction; 
+//            tail_segment.pos_x = 1;
+//            tail_segment.pos_y = 1;
+//            tail_segment.type = snk_tail;
+//            snek_ptr[i] = tail_segment;
+//            GameGrid[1][1] = snk_tail;
+//        }
+//        else {
+//            struct SnakeBodySegment body_segment; 
+//            body_segment.direction = right;
+//            //body_segment.linked_direction = &snek_ptr[i-1].direction; 
+//            body_segment.pos_x = snake_length - i;
+//            body_segment.pos_y = 1;
+//            body_segment.type = snk_body;
+//            snek_ptr[i] = body_segment;
+//            GameGrid[1][body_segment.pos_x] = snk_body;
+//        }
+//    }
 
     // As the parameter passed into the function for wall generation
     // probability does not specify probability of vertical wall gen
