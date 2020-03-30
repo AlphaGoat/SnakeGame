@@ -3,8 +3,4 @@
 
 int movement(struct SnakeBodySegment *segment, int **GameGrid);
 
-int cleanUpDeadSnek(struct Snake *snek, int **GameGrid);
-
-void freeGameGridMemory(int **GameGrid);
-
 #endif

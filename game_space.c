@@ -2,13 +2,14 @@
 #include <stdlib.h>
 
 #include "game_space.h"
+#include "snake.h"
 
 
-struct SnakeBodySegment NullSeg = {0};
+const struct SnakeBodySegment NullSeg = {0};
 
 // TODO: Try to get this working....
 int GenerateSnake(int row, int col, int segs2generate, int direction,
-         int npc_flag, struct Snake *snek_ptr, int **GameGrid) {
+         struct Snake *snek_ptr, int **GameGrid) {
     /* Checks for a path free of obstacles to place snake
      * :param row:            row of starting position
      * :param col:            column of starting position
@@ -25,6 +26,7 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
      * :param GameGrid:       pointer to 2-D array of game grid
      */
     int snek_length = snek_ptr->length;
+    int npc_flag = snek_ptr->npc;
     // Are we out of bounds?
     if (row >= HEIGHT || row < 0 || col >= WIDTH || col < 0) {
         return 0;
@@ -44,12 +46,12 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
 //                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number, 
 //                        snk_tail);
                 GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
-                        snk_body);
+                        snk_body, GameGrid);
             case 1:
 //                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
 //                        npc_snk_tail);
                 GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
-                        npc_snk_body);
+                        npc_snk_body, GameGrid);
         }
         return 1;
     }
@@ -59,9 +61,11 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
         // If this is the first step through recursion, then generate a snake head
         switch (npc_flag) {
             case 0:
-                GenerateSnakeSegment(snek_ptr, row, col, direction, 0, snk_head);
+                GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                        0, snk_head, GameGrid);
             case 1:
-                GenerateSnakeSegment(snek_ptr, row, col, direction, 0, npc_snk_head);
+                GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                        0, npc_snk_head, GameGrid);
         }
 //        printf("Generating head (seg_number 0)\n");
 
@@ -73,10 +77,10 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
         switch (npc_flag) {
             case 0:
                 GenerateSnakeSegment(snek_ptr, row, col, direction, 
-                        seg_number, snk_body);
+                        seg_number, snk_body, GameGrid);
             case 1:
                 GenerateSnakeSegment(snek_ptr, row, col, direction,
-                        seg_number, npc_snk_body);
+                        seg_number, npc_snk_body, GameGrid);
         }
     }
 
@@ -85,48 +89,47 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
     // UP ----
     if (direction != up) {
         if (GenerateSnake(row-1, col, segs2generate-1, down, 
-                    npc_flag, snek_ptr, GameGrid)) {
+                    snek_ptr, GameGrid)) {
             return 1;
         }
     }
 
     // DOWN ----
-    else if (direction != down) {
+    if (direction != down) {
         if (GenerateSnake(row+1, col, segs2generate-1, up, 
-                    npc_flag, snek_ptr, GameGrid)) {
+                    snek_ptr, GameGrid)) {
             return 1;
         }
     }
 
     // RIGHT ----
-    else if (direction != right) {
+    if (direction != right) {
         if (GenerateSnake(row, col+1, segs2generate-1, left, 
-                    npc_flag, snek_ptr, GameGrid)) {
+                    snek_ptr, GameGrid)) {
             return 1;
         }
     }
 
     // LEFT ----
-    else if (direction != left) {
+    if (direction != left) {
         if (GenerateSnake(row, col-1, segs2generate-1, right, 
-                    npc_flag, snek_ptr, GameGrid)) {
+                    snek_ptr, GameGrid)) {
             return 1;
         }
     }
 
     // If there are no more spaces to go, remove the snake segment
     // from current position
-    else {
-        printf("Generating a null segment\n");
-        int seg_number = (snek_length - segs2generate);
-//        snek->segments[n] = NULL;
-        snek_ptr->segments[seg_number] = NullSeg;
-    }
+    // Remove segment from GameGrid
+    GameGrid[row][col] = blank_space;
+    int seg_number = (snek_length - segs2generate);
+//    snek->segments[n] = NULL;
+    snek_ptr->segments[seg_number] = NullSeg;
     return 0;
 }
 //
 void GenerateSnakeSegment(struct Snake *snek_ptr, int row, int col,
-        int direction, int seg_number, int seg_type) {
+        int direction, int seg_number, int seg_type, int **GameGrid) {
     /* Wrapper function to generate a snake segment
      * :param snek:    pointer to snake structure
      * :param row:     row we are placing body segment
@@ -139,6 +142,9 @@ void GenerateSnakeSegment(struct Snake *snek_ptr, int row, int col,
     body_segment.direction = direction;
     body_segment.type = seg_type;
     snek_ptr->segments[seg_number] = body_segment;
+
+    // Place segment on GameGrid
+    GameGrid[row][col] = seg_type;
 }
 
 void GenerateGameSpace(int foodGenProb, int wallGenProb, int **GameGrid){
@@ -580,5 +586,94 @@ void randomlyGenerateFood(int foodGenProb, int **GameGrid) {
             }
         }
     }
+}
+
+void randomlyPlaceSneks(struct Snake *snek_ptr, int **GameGrid) {
+    /* Randomly places all sneks in input array
+     * on Game Grid*/
+
+    // Generate snakes in game grid
+    // Initialize counter to keep track of the number of snakes
+    // that have been generated
+    int counter = 0;
+
+    // Initialize a temporary array to hold values of snakes
+//    struct Snake temp_array[num_sneks];
+//    for (int i = 0; i < num_sneks; i++) {
+//        temp_array[i] = *(*snek_array + i);
+
+    // test counter, just to ensure that the while loop exits 
+    int test_counter = 0;
+    int snake_generated = 0;
+    while (!snake_generated) {
+//        int snek_length = snek_array[num_snakes_gen_counter].length;
+        // Randomly generate a starting point for the snake 
+        // in the game grid and the direction of travel for the snake
+        int start_row = 1 + (rand() % 19);
+        int start_col = 1 + (rand() % 19);
+        int direction = rand() % 4;
+//        int segs2generate = (*snek_array + counter)->length;
+        int segs2generate;
+        segs2generate = snek_ptr->length;
+
+        // Snake structure pointer
+//        struct Snake *snek_ptr;
+//        snek_ptr = &temp_array[counter];
+
+        if (GenerateSnake(start_row, start_col, segs2generate, direction, 
+                    snek_ptr, GameGrid)) {
+//            for (int i = 0; i < snek_length; i++) {
+//                struct SnakeBodySegment segment;
+//    //            segment = snek_ptr[num_snakes_gen_counter]->segments[i];
+//                segment = snek_array[num_snakes_gen_counter].segments[i];
+//                int row = segment.pos_y;
+//                int col = segment.pos_x;
+//                GameGrid[row][col] = segment.type;
+//            temp_arr[num_snakes_gen_counter] = *snek_ptr;
+//            (*snek_array)[counter] = snek;
+            snake_generated = 1;
+            printGameBoard(GameGrid);
+        }
+
+        // JUST FOR TESTING PURPOSES
+        test_counter += 1;
+        if (test_counter > 100) {
+            printf("Too many iterations in while loop\n");
+            exit(0);
+            freeGameGridMemory(GameGrid);
+        }
+            // Iterate num_snakes_counter by one
+    }
+
+//    // Reassign passed pointer to newly generated snake array
+//    snek_array = &(temp_array[0]); 
+
+    // Assign the value of this array to original pointer
+ //   snek_array = temp_arr;
+
+}
+
+
+int cleanUpDeadSnek(struct Snake *snek, int **GameGrid) {
+    /* Removes spaces in Game Grid that used to be occupied
+     * by snake
+     */
+    for (int i = 0; i < snek->length; i++) {
+        int row = snek->segments[i].pos_y;
+        int col = snek->segments[i].pos_x;
+        GameGrid[row][col] = blank_space;
+        // What if dead snakes became food?
+        // GameGrid[row][col] = food;
+    }
+    return 1;
+}
+
+
+void freeGameGridMemory(int **GameGrid) {
+    for (int i = 0; i < HEIGHT; i++) {
+        free(GameGrid[i]);
+    }
+    free(GameGrid);
+    GameGrid = NULL;
 }
 

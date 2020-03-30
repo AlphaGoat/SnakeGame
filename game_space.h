@@ -5,6 +5,7 @@
 #define HEIGHT 20
 
 //int **GameGrid[WIDTH][HEIGHT];
+#define SNAKE_MAX_LEN  10
 
 struct SnakeBodySegment {
     int pos_x;
@@ -14,6 +15,8 @@ struct SnakeBodySegment {
     int type;
 };
 
+//struct SnakeBodySegment NullSeg = {-1, -1, -1, -1, -1};
+
 
 //template <int len>
 struct Snake{
@@ -21,10 +24,11 @@ struct Snake{
 ////    int pos_y; // current y-position of snake's head
     int length;
     int alive;
+    int npc;
 ////    int speed;
 ////    int direction;
 //////    int speed;
-    struct SnakeBodySegment segments[];
+    struct SnakeBodySegment segments[SNAKE_MAX_LEN];
 };
 
 
@@ -62,10 +66,10 @@ typedef enum {
 
 // Functions defined in snake.c
 int GenerateSnake(int row, int col, int segs2generate, int direction,
-        int npc_flag, struct Snake *snek_ptr, int **GameGrid);
+        struct Snake *snek_ptr, int **GameGrid);
 
 void GenerateSnakeSegment(struct Snake *snek_ptr, int row, int col,
-        int direction, int seg_number, int seg_type);
+        int direction, int seg_number, int seg_type, int **GameGrid);
 
 void GenerateGameSpace(int foodGenProb, int wallGenProb, int **GameGrid);
 
@@ -92,5 +96,11 @@ int rollForLowerVertJoint(int row, int col, int vertProb,
 void printGameBoard(int **GameGrid);
 
 void randomlyGenerateFood(int foodGenProb, int **GameGrid);
+
+void randomlyPlaceSneks(struct Snake *snek_ptr, int **GameGrid);
+
+int cleanUpDeadSnek(struct Snake *snek, int **GameGrid);
+
+void freeGameGridMemory(int **GameGrid);
 
 #endif
