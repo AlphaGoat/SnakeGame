@@ -592,42 +592,23 @@ void randomlyPlaceSneks(struct Snake *snek_ptr, int **GameGrid) {
     // that have been generated
     int counter = 0;
 
-    // Initialize a temporary array to hold values of snakes
-//    struct Snake temp_array[num_sneks];
-//    for (int i = 0; i < num_sneks; i++) {
-//        temp_array[i] = *(*snek_array + i);
-
     // test counter, just to ensure that the while loop exits 
     int test_counter = 0;
     int snake_generated = 0;
     while (!snake_generated) {
-//        int snek_length = snek_array[num_snakes_gen_counter].length;
         // Randomly generate a starting point for the snake 
         // in the game grid and the direction of travel for the snake
         int start_row = 1 + (rand() % 19);
         int start_col = 1 + (rand() % 19);
         int direction = rand() % 4;
-//        int segs2generate = (*snek_array + counter)->length;
+
         int segs2generate;
         segs2generate = snek_ptr->length;
 
-        // Snake structure pointer
-//        struct Snake *snek_ptr;
-//        snek_ptr = &temp_array[counter];
 
         if (GenerateSnake(start_row, start_col, segs2generate, direction, 
                     snek_ptr, GameGrid)) {
-//            for (int i = 0; i < snek_length; i++) {
-//                struct SnakeBodySegment segment;
-//    //            segment = snek_ptr[num_snakes_gen_counter]->segments[i];
-//                segment = snek_array[num_snakes_gen_counter].segments[i];
-//                int row = segment.pos_y;
-//                int col = segment.pos_x;
-//                GameGrid[row][col] = segment.type;
-//            temp_arr[num_snakes_gen_counter] = *snek_ptr;
-//            (*snek_array)[counter] = snek;
             snake_generated = 1;
-            printGameBoard(GameGrid);
         }
 
         // JUST FOR TESTING PURPOSES
@@ -639,12 +620,6 @@ void randomlyPlaceSneks(struct Snake *snek_ptr, int **GameGrid) {
         }
             // Iterate num_snakes_counter by one
     }
-
-//    // Reassign passed pointer to newly generated snake array
-//    snek_array = &(temp_array[0]); 
-
-    // Assign the value of this array to original pointer
- //   snek_array = temp_arr;
 
 }
 
