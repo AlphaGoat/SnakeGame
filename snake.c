@@ -156,7 +156,6 @@ int main(int argc, char **argv) {
             player_snek.length = snake_length;
             player_snek.alive = 1;
             player_snek.npc = 0;
-            player_snek.segments[snake_length];
             randomlyPlaceSneks(&player_snek, GameGrid);
             snek_array[0] = player_snek;
         }
@@ -165,7 +164,6 @@ int main(int argc, char **argv) {
             npc_snek.length = snake_length;
             npc_snek.alive = 1;
             npc_snek.npc = 1;
-            npc_snek.segments[snake_length];
             randomlyPlaceSneks(&npc_snek, GameGrid);
             snek_array[i] = npc_snek;
         }
@@ -190,26 +188,23 @@ int main(int argc, char **argv) {
     // Init vars for game loop
     int score = 0;
 
-    // pointer to player snake flag (1-alive, 0-dead)
+    // pointer to player snake 'alive' flag (1-alive, 0-dead)
     int *alive_flag;
     alive_flag = &snek_array[0].alive;
 
     // Initiate game loop
-//    int snek_alive = 1;
     while (*alive_flag) {
 
         // Loop over all generated snakes
-//        for (int j = 0; j < num_sneks; j++) {
+        for (int j = 0; j < num_sneks; j++) {
 
-//            struct Snake *curr_snek;
-//            curr_snek = *snek_ptr[j];
-//            curr_snek = &snek_array[0];
+            struct Snake *snek;
+            snek = &snek_array[j];
+            int x_pos = snek->segments[0].pos_x;
 
             // The first snake in the array will always be the user
-//            if (j == 0) {
+            if (j == 0) {
                 // Set terminal in raw mode to handle user input
-                struct Snake *snek;
-                snek = &snek_array[0];
                 if (tty_raw(fd) != 0) {
                     printf("Error. Unable to set terminal in raw mode\n");
                     printf("Exiting game.\n");
@@ -225,7 +220,6 @@ int main(int argc, char **argv) {
                 double time_taken;
 //                struct SnakeBodySegment *head;
 //                head = &(curr_snek->segments[0]);
-                int x_pos = snek->segments[0].pos_x;
                 while(time_taken < turn_time) {
 
                     // Check if user has input a command
@@ -255,20 +249,28 @@ int main(int argc, char **argv) {
                 }
                 // Reset timer
                 time_taken = 0.0;
-                printf("user_input: %s\n", user_input);
-                printf("user_input first char: %s\n", &user_input[0]);
+//                printf("user_input: %s\n", user_input);
+//                printf("user_input first char: %s\n", &user_input[0]);
+            }
             // Perform actions for npc snakes
-//            else {
-//                basicNPCSnekBehavior(curr_snek, GameGrid);
-//            }
+            else {
+                // Check if snake is still alive. If not, no action needs
+                // to be taken
+                if (snek->alive) 
+                    basicNPCSnekBehavior(snek, GameGrid);
+                else
+                    continue;
+            }
+                
 
             // Flush terminal input buffer
             //user_input[0] = '\0';
             
             // For some inexplicable reason, this is necessary 
-            // (for some reason, changing the direction of the head
+            // changing the direction of the head
             // segment initializes it's pos_x to a random value
             snek->segments[0].pos_x = x_pos;
+
             // Move snek
             for (int i = 0; i < snake_length; i++) {
                 // Clear space previously occupied by snake segment
@@ -285,7 +287,10 @@ int main(int argc, char **argv) {
                     // If the object the snake collided with is food,
                     // increase user score and continue
                     if (GameGrid[post_row][post_col] == food) {
-                        score += 500;
+                        // If player snake, increase score
+                        if (j == 0)
+                            score += 500;
+
                         GameGrid[post_row][post_col] = segment->type;
                     }
                     // If the snake collides with anything else, it dies
@@ -318,7 +323,7 @@ int main(int argc, char **argv) {
 
             // Randomly generate food
             randomlyGenerateFood(food_gen_prob, GameGrid);
-        //}
+        }
     }
 
     // Free memory for game grid
