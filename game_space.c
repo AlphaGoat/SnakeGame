@@ -41,17 +41,13 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
     // If so, generate a tail and return success!
     else if (segs2generate == 1) {
         int seg_number = snek_length - 1;
-        switch (npc_flag) {
-            case 0:
-//                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number, 
-//                        snk_tail);
-                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
-                        snk_body, GameGrid);
-            case 1:
-//                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
-//                        npc_snk_tail);
-                GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
-                        npc_snk_body, GameGrid);
+        if (npc_flag) {
+            GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
+                 npc_snk_body, GameGrid);
+        }
+        else {
+            GenerateSnakeSegment(snek_ptr, row, col, direction, seg_number,
+                    snk_body, GameGrid);
         }
         return 1;
     }
@@ -59,28 +55,27 @@ int GenerateSnake(int row, int col, int segs2generate, int direction,
     // If space is not occupied, generate snake segment
     else if (segs2generate == snek_length){
         // If this is the first step through recursion, then generate a snake head
-        switch (npc_flag) {
-            case 0:
-                GenerateSnakeSegment(snek_ptr, row, col, direction, 
-                        0, snk_head, GameGrid);
-            case 1:
-                GenerateSnakeSegment(snek_ptr, row, col, direction, 
-                        0, npc_snk_head, GameGrid);
+        if (npc_flag) {
+            GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                    0, npc_snk_head, GameGrid);
         }
-//        printf("Generating head (seg_number 0)\n");
+        else {
+            GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                    0, snk_head, GameGrid);
+        } 
 
         // Otherwise, generate a body segment
     }
     else {
         int seg_number = (snek_length - segs2generate);
 //        printf("On seg_number: %d\n", seg_number);
-        switch (npc_flag) {
-            case 0:
-                GenerateSnakeSegment(snek_ptr, row, col, direction, 
-                        seg_number, snk_body, GameGrid);
-            case 1:
-                GenerateSnakeSegment(snek_ptr, row, col, direction,
-                        seg_number, npc_snk_body, GameGrid);
+        if (npc_flag) {
+            GenerateSnakeSegment(snek_ptr, row, col, direction,
+                    seg_number, npc_snk_body, GameGrid);
+        }
+        else {
+            GenerateSnakeSegment(snek_ptr, row, col, direction, 
+                    seg_number, snk_body, GameGrid);
         }
     }
 

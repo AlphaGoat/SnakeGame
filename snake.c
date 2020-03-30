@@ -198,67 +198,7 @@ int main(int argc, char **argv) {
 
     freeGameGridMemory(GameGrid);
 
-
-//    while (num_snakes_gen_counter < num_sneks) {
-//        // Randomly generate a starting point for the snake 
-//        // in the game grid and the direction of travel for the snake
-//        int start_row = 1 + (rand() % 19);
-//        int start_col = 1 + (rand() % 19);
-//        int direction = rand() % 4;
-//        int segs2generate = snake_length;
-//
-//        printGameBoard(GameGrid);
-//
-//        // Generate player snake
-//        if (num_snakes_gen_counter == 0) {
-//
-//            // If we are succesfully able to generate all segments of
-//            // the snake, starting from the given position, place all
-//            // segements of the snake on the GameGrid
-//            if (GenerateSnake(start_row, start_col, segs2generate, direction, 
-//                        0, &snek_array[num_snakes_gen_counter], GameGrid)) {
-//                for (int i = 0; i < snake_length; i++) {
-//                    struct SnakeBodySegment segment;
-//    //                segment = snek_ptr[num_snakes_gen_counter]->segments[i];
-//                    segment = snek_array[num_snakes_gen_counter].segments[i];
-//                    int row = segment.pos_y;
-//                    int col = segment.pos_x;
-//                    GameGrid[row][col] = segment.type;
-//                }
-//                printGameBoard(GameGrid);
-//
-//                // Iterate num_snakes_gen_counter by one
-//            num_snakes_gen_counter += 1;
-//            }
-//        }
-//        else {
-//            if (GenerateSnake(start_row, start_col, segs2generate, direction, 
-//                        1, &snek_array[num_snakes_gen_counter], GameGrid)) {
-//                for (int i = 0; i < snake_length; i++) {
-//                    struct SnakeBodySegment segment;
-//    //                segment = snek_ptr[num_snakes_gen_counter]->segments[i];
-//                    segment = snek_array[num_snakes_gen_counter].segments[i];
-//                    int row = segment.pos_y;
-//                    int col = segment.pos_x;
-//                    GameGrid[row][col] = segment.type;
-//                }
-//                printGameBoard(GameGrid);
-//
-//                // Iterate num_snakes_counter by one
-//            num_snakes_gen_counter += 1;
-//            }
-//        }
-//
-//        // JUST FOR TESTING PURPOSES
-//        test_counter += 1;
-//        if (test_counter > 100) {
-//            printf("Too many iterations in while loop\n");
-//            exit(0);
-//        }
-//    }
-    /* COMMENTED OUT FOR TESTING PURPOSES *
-     * 
-     *                                    *
+    /* COMMENT OUT FOR TESTING *
 
     // Open port to terminal being accessed by the user 
     // playing the game
@@ -408,7 +348,7 @@ int main(int argc, char **argv) {
     // to terminal, and end game
     exitGame(fd);
 
-    */
+    * END COMMENT OUT CODE */
 
     return 0;
 }
